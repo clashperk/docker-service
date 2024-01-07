@@ -1,0 +1,31 @@
+FROM node:18-alpine as build
+
+WORKDIR /app
+
+COPY --chown=node:node package*.json ./
+
+RUN npm ci
+
+COPY --chown=node:node . .
+
+RUN npm run build
+
+USER node
+
+# ------ PRODUCTION BUILD ------
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY --chown=node:node package*.json ./
+
+COPY --chown=node:node --from=build /app/dist ./dist
+
+RUN npm ci --omit=dev
+
+ENV NODE_ENV production
+
+EXPOSE 8080
+ENV PORT 8080
+
+CMD [ "node", "dist/main.js" ]
