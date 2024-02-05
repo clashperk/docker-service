@@ -34,6 +34,7 @@ export class StorageService {
       },
       {
         returnDocument: 'before',
+        upsert: true,
       },
     );
   }
