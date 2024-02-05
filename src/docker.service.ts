@@ -122,6 +122,11 @@ export class DockerService {
     return id;
   }
 
+  async stopContainer(id: string) {
+    await this.docker.getContainer(id).stop();
+    return id;
+  }
+
   async deleteContainerByName(name: string) {
     const containers = await this.docker.listContainers({ all: true });
     const targetContainer = containers.find((container) => container.Names.includes(name));

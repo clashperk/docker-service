@@ -12,6 +12,8 @@ export class ServicesEntity {
   isProd: boolean;
 
   containerId: string;
+
+  isDisabled: boolean;
 }
 
 export class CreateServiceInput {

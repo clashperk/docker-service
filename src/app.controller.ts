@@ -49,6 +49,18 @@ export class AppController {
   }
 
   @UseGuards(ApiKeyGuard)
+  @Put('/services/:id/suspend')
+  async suspendService(@Param('id') serviceId: string) {
+    return this.appService.suspendService(serviceId);
+  }
+
+  @UseGuards(ApiKeyGuard)
+  @Put('/services/:id/resume')
+  async resumeService(@Param('id') serviceId: string) {
+    return this.appService.resumeService(serviceId);
+  }
+
+  @UseGuards(ApiKeyGuard)
   @Delete('/services/:id')
   deleteService(@Param('id') serviceId: string) {
     return this.appService.stopService(serviceId);

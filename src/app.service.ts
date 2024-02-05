@@ -108,12 +108,34 @@ export class AppService {
     return { message: 'OK' };
   }
 
+  async suspendService(serviceId: string) {
+    const service = await this.storageService.findById(serviceId);
+    if (!service) throw new NotFoundException('Service not found');
+
+    await this.dockerService.stopContainer(service.containerId);
+    await this.storageService.suspendService(serviceId);
+
+    return { message: 'OK' };
+  }
+
+  async resumeService(serviceId: string) {
+    const service = await this.storageService.findById(serviceId);
+    if (!service) throw new NotFoundException('Service not found');
+
+    await this.redeployService(service.serviceId);
+    await this.storageService.resumeService(serviceId);
+
+    return { message: 'OK' };
+  }
+
   private async redeployServices() {
     const containers = await this.dockerService.getContainers();
 
     for (const container of containers) {
       const service = await this.storageService.findByContainerId(container.id);
       if (!service) continue;
+
+      if (service.isDisabled) continue;
 
       try {
         await this.redeployService(service.serviceId);

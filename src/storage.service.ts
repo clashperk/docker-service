@@ -27,6 +27,7 @@ export class StorageService {
           ...input,
           isRunning: false,
           isProd: false,
+          isDisabled: false,
         },
         $setOnInsert: {
           containerId,
@@ -63,6 +64,22 @@ export class StorageService {
     return this.collection.findOneAndUpdate(
       { serviceId },
       { $set: { isRunning: false } },
+      { returnDocument: 'after' },
+    );
+  }
+
+  async suspendService(serviceId: string) {
+    return this.collection.findOneAndUpdate(
+      { serviceId },
+      { $set: { isRunning: false, isDisabled: true } },
+      { returnDocument: 'after' },
+    );
+  }
+
+  async resumeService(serviceId: string) {
+    return this.collection.findOneAndUpdate(
+      { serviceId },
+      { $set: { isRunning: true, isDisabled: false } },
       { returnDocument: 'after' },
     );
   }
