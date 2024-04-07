@@ -156,12 +156,18 @@ export class AppService {
     const services = await this.storageService.getAllServices();
 
     for (const service of services) {
+      if (service.isDisabled) continue;
+
+      try {
+        await this.dockerService.deleteContainer(service.containerId);
+      } catch {}
+
       try {
         this.logger.log(`Migrating [${service.name}]`);
 
         const containerId = await this.dockerService.createContainer(
           this.serializedContainerName(service.name, service.serviceId),
-          [`TOKEN=${service.token}`, `NODE_ENV=development`],
+          [`TOKEN=${service.token}`, `NODE_ENV=${service.isProd ? 'production' : 'development'}`],
         );
 
         await this.storageService.updateContainerId(service.serviceId, containerId);
@@ -169,7 +175,7 @@ export class AppService {
         this.logger.error(error);
       }
 
-      await this.delay(3000);
+      await this.delay(5000);
     }
 
     this.logger.log('All services migrated');

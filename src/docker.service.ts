@@ -105,7 +105,8 @@ export class DockerService {
       HostConfig: {
         Memory: 1024 * 1024 * 500,
         RestartPolicy: {
-          Name: 'always',
+          Name: 'on-failure',
+          MaximumRetryCount: 5,
         },
       },
     });

@@ -57,7 +57,7 @@ export class StorageService {
   }
 
   async getAllServices() {
-    return this.collection.find({ isRunning: { $exists: false } }).toArray();
+    return this.collection.find().toArray();
   }
 
   async stopService(serviceId: string) {
