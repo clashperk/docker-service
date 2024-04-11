@@ -25,6 +25,8 @@ export const envKeys = [
   'REDIS_URL',
   'SENTRY',
   'TZ',
+  'CUSTOM_BOT_SERVICE',
+  'CUSTOM_BOT_SERVICE_TOKEN',
 ];
 
 export const DEPLOYMENT_QUEUE = 'deployment-queue';
