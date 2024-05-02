@@ -69,7 +69,12 @@ export class AppService {
     const service = await this.storageService.findById(serviceId);
     if (!service) throw new NotFoundException();
 
-    await this.dockerService.deleteContainer(service.containerId);
+    try {
+      await this.dockerService.deleteContainer(service.containerId);
+    } catch (error) {
+      this.logger.log(`Service [${service.name}] deletion failed`);
+      this.logger.error(error);
+    }
 
     const containerId = await this.dockerService.createContainer(
       this.serializedContainerName(service.name, service.serviceId),
@@ -100,6 +105,7 @@ export class AppService {
     try {
       await this.dockerService.deleteContainer(service.containerId);
     } catch (error) {
+      this.logger.log(`Service [${service.name}] stop failed`);
       this.logger.error(error);
     }
 
@@ -112,7 +118,13 @@ export class AppService {
     const service = await this.storageService.findById(serviceId);
     if (!service) throw new NotFoundException('Service not found');
 
-    await this.dockerService.stopContainer(service.containerId);
+    try {
+      await this.dockerService.stopContainer(service.containerId);
+    } catch (error) {
+      this.logger.log(`Service [${service.name}] suspend failed`);
+      this.logger.error(error);
+    }
+
     await this.storageService.suspendService(serviceId);
 
     return { message: 'OK' };
