@@ -114,17 +114,27 @@ export class AppService {
     return { message: 'OK' };
   }
 
-  async suspendService(serviceId: string) {
+  async deleteService(serviceId: string) {
     const service = await this.storageService.findById(serviceId);
     if (!service) throw new NotFoundException('Service not found');
 
     try {
-      await this.dockerService.stopContainer(service.containerId);
+      await this.dockerService.deleteContainer(service.containerId);
     } catch (error) {
-      this.logger.log(`Service [${service.name}] suspend failed`);
+      this.logger.log(`Service [${service.name}] stop failed`);
       this.logger.error(error);
     }
 
+    await this.storageService.stopService(serviceId);
+
+    return { message: 'OK' };
+  }
+
+  async suspendService(serviceId: string) {
+    const service = await this.storageService.findById(serviceId);
+    if (!service) throw new NotFoundException('Service not found');
+
+    await this.stopService(serviceId);
     await this.storageService.suspendService(serviceId);
 
     return { message: 'OK' };

@@ -63,6 +63,6 @@ export class AppController {
   @UseGuards(ApiKeyGuard)
   @Delete('/services/:id')
   deleteService(@Param('id') serviceId: string) {
-    return this.appService.stopService(serviceId);
+    return this.appService.deleteService(serviceId);
   }
 }

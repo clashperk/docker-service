@@ -68,6 +68,10 @@ export class StorageService {
     );
   }
 
+  async deleteService(serviceId: string) {
+    return this.collection.deleteOne({ serviceId });
+  }
+
   async suspendService(serviceId: string) {
     return this.collection.findOneAndUpdate(
       { serviceId },
