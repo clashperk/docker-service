@@ -27,6 +27,8 @@ export const envKeys = [
   'TZ',
   'CUSTOM_BOT_SERVICE',
   'CUSTOM_BOT_SERVICE_TOKEN',
+  'POSTHOG_API_KEY',
+  'POSTHOG_PERSONAL_API_KEY',
 ];
 
 export const DEPLOYMENT_QUEUE = 'deployment-queue';
