@@ -39,16 +39,18 @@ export class AppService {
     const existingService = await this.storageService.createService(input, 'pending_container_id');
     if (existingService) await this.stopService(existingService.serviceId);
 
+    const containerName = this.serializedContainerName(input.name, input.serviceId);
     try {
-      const containerId = await this.dockerService.createContainer(
-        this.serializedContainerName(input.name, input.serviceId),
-        [`TOKEN=${input.token}`, `NODE_ENV=development`],
-      );
+      const containerId = await this.dockerService.createContainer(containerName, [
+        `TOKEN=${input.token}`,
+        `NODE_ENV=development`,
+        `SERVICE_NAME=${containerName}`,
+      ]);
 
       await this.storageService.updateContainerId(input.serviceId, containerId);
     } catch (error) {
       this.logger.error(error);
-      this.clearOldContainer(this.serializedContainerName(input.name, input.serviceId));
+      this.clearOldContainer(containerName);
       throw error;
     }
 
@@ -76,10 +78,12 @@ export class AppService {
       this.logger.error(error);
     }
 
-    const containerId = await this.dockerService.createContainer(
-      this.serializedContainerName(service.name, service.serviceId),
-      [`TOKEN=${service.token}`, `NODE_ENV=${service.isProd ? 'production' : 'development'}`],
-    );
+    const containerName = this.serializedContainerName(service.name, service.serviceId);
+    const containerId = await this.dockerService.createContainer(containerName, [
+      `TOKEN=${service.token}`,
+      `NODE_ENV=${service.isProd ? 'production' : 'development'}`,
+      `SERVICE_NAME=${containerName}`,
+    ]);
     await this.storageService.updateContainerId(service.serviceId, containerId);
 
     return { containerId };
@@ -187,10 +191,12 @@ export class AppService {
       try {
         this.logger.log(`Migrating [${service.name}]`);
 
-        const containerId = await this.dockerService.createContainer(
-          this.serializedContainerName(service.name, service.serviceId),
-          [`TOKEN=${service.token}`, `NODE_ENV=${service.isProd ? 'production' : 'development'}`],
-        );
+        const containerName = this.serializedContainerName(service.name, service.serviceId);
+        const containerId = await this.dockerService.createContainer(containerName, [
+          `TOKEN=${service.token}`,
+          `NODE_ENV=${service.isProd ? 'production' : 'development'}`,
+          `SERVICE_NAME=${containerName}`,
+        ]);
 
         await this.storageService.updateContainerId(service.serviceId, containerId);
       } catch (error) {
@@ -204,7 +210,7 @@ export class AppService {
   }
 
   private serializedContainerName(name: string, serviceId: string) {
-    return `${serviceId.substring(0, 5)}-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+    return `${serviceId}-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
   }
 
   private delay(ms: number) {
