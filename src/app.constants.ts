@@ -30,6 +30,7 @@ export const envKeys = [
   'POSTHOG_API_KEY',
   'POSTHOG_PERSONAL_API_KEY',
   'GOOGLE_TRANSLATION_KEY',
+  'INTERNAL_API_KEY',
 ];
 
 export const DEPLOYMENT_QUEUE = 'deployment-queue';
