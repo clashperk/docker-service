@@ -1,0 +1,11 @@
+services:
+  docker-service:
+    image: 432159388664.dkr.ecr.us-east-1.amazonaws.com/auto-deployment-service:latest
+    container_name: docker-service
+    restart: always
+    env_file:
+      - .env
+      - .env.services.env
+    mem_limit: 1gb
+    ports:
+      - 8089:8080
