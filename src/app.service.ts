@@ -42,7 +42,7 @@ export class AppService {
     const containerName = this.serializedContainerName(input.name, input.serviceId);
     try {
       const containerId = await this.dockerService.createContainer(containerName, [
-        `TOKEN=${input.token}`,
+        `DISCORD_TOKEN=${input.token}`,
         `NODE_ENV=development`,
         `SERVICE_NAME=${containerName}`,
       ]);
@@ -80,7 +80,7 @@ export class AppService {
 
     const containerName = this.serializedContainerName(service.name, service.serviceId);
     const containerId = await this.dockerService.createContainer(containerName, [
-      `TOKEN=${service.token}`,
+      `DISCORD_TOKEN=${service.token}`,
       `NODE_ENV=${service.isProd ? 'production' : 'development'}`,
       `SERVICE_NAME=${containerName}`,
     ]);
@@ -193,7 +193,7 @@ export class AppService {
 
         const containerName = this.serializedContainerName(service.name, service.serviceId);
         const containerId = await this.dockerService.createContainer(containerName, [
-          `TOKEN=${service.token}`,
+          `DISCORD_TOKEN=${service.token}`,
           `NODE_ENV=${service.isProd ? 'production' : 'development'}`,
           `SERVICE_NAME=${containerName}`,
         ]);
