@@ -8,7 +8,7 @@ export class StorageService {
   private collection: Collection<ServicesEntity>;
 
   constructor(@Inject(Tokens.MONGODB) db: Db) {
-    this.collection = db.collection('applications');
+    this.collection = db.collection('CustomBots');
   }
 
   async findById(serviceId: string) {
