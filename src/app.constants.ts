@@ -38,6 +38,10 @@ export const envKeys = [
 
   'MONGODB_URL',
   'GLOBAL_MONGODB_URL',
+
+  'CLICKHOUSE_PASSWORD',
+  'CLICKHOUSE_USER',
+  'CLICKHOUSE_HOST',
 ];
 
 export const DEPLOYMENT_QUEUE = 'deployment-queue';
