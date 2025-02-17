@@ -42,6 +42,9 @@ export const envKeys = [
   'CLICKHOUSE_PASSWORD',
   'CLICKHOUSE_USER',
   'CLICKHOUSE_HOST',
+
+  'DOCKER_SERVICE_API_BASE_URL',
+  'DOCKER_SERVICE_API_KEY',
 ];
 
 export const DEPLOYMENT_QUEUE = 'deployment-queue';
