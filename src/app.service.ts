@@ -218,11 +218,8 @@ export class AppService {
   }
 
   public async getAllServices() {
-    const services = await this.storageService.getAllServices();
-    const payload = JSON.stringify(
-      services.filter((service) => service.isRunning || !service.isDisabled),
-    );
-    return encrypt({ payload, key: this.cryptoKey, iv: this.cryptoIv });
+    const services = await this.storageService.getActiveServices();
+    return encrypt({ payload: JSON.stringify(services), key: this.cryptoKey, iv: this.cryptoIv });
   }
 
   private serializedContainerName(name: string, serviceId: string) {
