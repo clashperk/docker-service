@@ -65,4 +65,10 @@ export class AppController {
   deleteService(@Param('id') serviceId: string) {
     return this.appService.deleteService(serviceId);
   }
+
+  @UseGuards(ApiKeyGuard)
+  @Get('/services')
+  async getService() {
+    return { payload: await this.appService.getAllServices() };
+  }
 }

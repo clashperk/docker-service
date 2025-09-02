@@ -10,7 +10,7 @@ export class ApiKeyGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
-    const key = req.headers?.['x-api-key'];
+    const key = req.headers?.['x-api-key'] || req.query?.key;
     if (key !== this.apiKey) throw new UnauthorizedException();
     return true;
   }

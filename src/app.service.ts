@@ -1,20 +1,28 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Queue } from 'bull';
 import { DEPLOYMENT_QUEUE } from './app.constants';
 import { CreateServiceInput } from './app.dto';
+import { encrypt } from './app.helper';
 import { DockerService } from './docker.service';
 import { StorageService } from './storage.service';
 
 @Injectable()
 export class AppService {
   private logger = new Logger(AppService.name);
+  private cryptoKey: string;
+  private cryptoIv: string;
 
   constructor(
+    private configService: ConfigService,
     private dockerService: DockerService,
     private storageService: StorageService,
     @InjectQueue(DEPLOYMENT_QUEUE) private deploymentQueue: Queue,
-  ) {}
+  ) {
+    this.cryptoKey = configService.getOrThrow('CRYPTO_KEY');
+    this.cryptoIv = configService.getOrThrow('CRYPTO_IV');
+  }
 
   getHello(): string {
     return 'Hello World! This service is responsible for automatic deployments of our custom bots!';
@@ -207,6 +215,14 @@ export class AppService {
     }
 
     this.logger.log('All services migrated');
+  }
+
+  public async getAllServices() {
+    const services = await this.storageService.getAllServices();
+    const payload = JSON.stringify(
+      services.filter((service) => service.isRunning || !service.isDisabled),
+    );
+    return encrypt({ payload, key: this.cryptoKey, iv: this.cryptoIv });
   }
 
   private serializedContainerName(name: string, serviceId: string) {
