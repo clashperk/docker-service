@@ -44,6 +44,9 @@ export const envKeys = [
 
   'DOCKER_SERVICE_API_BASE_URL',
   'DOCKER_SERVICE_API_KEY',
+
+  'GITBOOK_API_TOKEN',
+  'CEREBRAS_API_KEY',
 ];
 
 export const DEPLOYMENT_QUEUE = 'deployment-queue';
