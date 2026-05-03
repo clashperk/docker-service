@@ -25,9 +25,9 @@ export class DockerService {
       (KEY) => `${KEY}=${this.configService.getOrThrow(`SHARED_ENV_${KEY}`)}`,
     );
 
-    for (const key in process.env) {
-      if (key.startsWith('SHARED_ENV_')) {
-        const item = `${key}=${process.env[key]}`;
+    for (const envKey in process.env) {
+      if (envKey.startsWith('SHARED_ENV_')) {
+        const item = `${envKey}=${process.env[envKey]}`;
         if (!this.envConfig.includes(item)) {
           this.envConfig.push(item);
         }
