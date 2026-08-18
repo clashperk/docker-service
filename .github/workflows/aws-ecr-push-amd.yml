@@ -1,4 +1,4 @@
-name: aws-ecr-publish
+name: aws-ecr-publish-amd
 
 on:
   push:
@@ -8,11 +8,11 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  SERVICE_NAME: auto-deployment-service-arm
+  SERVICE_NAME: auto-deployment-service-amd
 
 jobs:
   build:
-    name: aws-ecr-publish
+    name: aws-ecr-publish-amd
     runs-on: ubuntu-24.04
 
     steps:
