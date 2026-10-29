@@ -10,7 +10,7 @@ Guidance for Claude Code when working in **docker-service**.
 A NestJS service that manages the Docker containers for ClashPerk's **custom-bot**
 instances: it provisions, upgrades, suspends/resumes and removes per-customer bot
 containers, pulling their images from AWS ECR. Remote:
-`clashperk/custom-bot-service` (package name `docker-service`).
+`clashperk/docker-service`.
 
 ## How it works
 
